@@ -85,15 +85,20 @@ app.get("/api/v1/content", userMiddleware, async (req,res) => {
     })
 })
 
-app.delete("/api/v1/content", userMiddleware, async (req,res) => {
-    const contentId = req.body.contentid;
+app.delete("/api/v1/content", userMiddleware, async (req, res) => {
+    const contentId = req.body.contentid; 
 
-    await ContentModel.deleteMany({
-        contentId,
-        //@ts-ignore
-        userId: req.userId
-    })
-})
+    try {
+        await ContentModel.deleteMany({
+            _id: contentId,
+            //@ts-ignore
+            userId: req.userId 
+        });
+        res.json({ msg: "Content deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to delete content" });
+    }
+});
 
 app.post("/api/v1/brain/share", userMiddleware, async(req,res) => {
     const share = req.body.share;

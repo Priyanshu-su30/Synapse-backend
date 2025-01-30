@@ -89,11 +89,17 @@ app.get("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(
 }));
 app.delete("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const contentId = req.body.contentid;
-    yield db_1.ContentModel.deleteMany({
-        contentId,
-        //@ts-ignore
-        userId: req.userId
-    });
+    try {
+        yield db_1.ContentModel.deleteMany({
+            _id: contentId,
+            //@ts-ignore
+            userId: req.userId
+        });
+        res.json({ msg: "Content deleted successfully" });
+    }
+    catch (error) {
+        res.status(500).json({ error: "Failed to delete content" });
+    }
 }));
 app.post("/api/v1/brain/share", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const share = req.body.share;

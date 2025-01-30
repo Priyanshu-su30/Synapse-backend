@@ -1,6 +1,6 @@
 import mongoose, {model, Schema} from "mongoose";
 
-mongoose.connect("mongodb+srv://newton:newtonmkc@cluster0.5rnez.mongodb.net/brainly")
+mongoose.connect(`mongodb+srv://newton:${process.env.MONGOPASSWORD}@cluster0.5rnez.mongodb.net/brainly`)
 
 const UserSchema = new Schema({
     username: {type: String, unique: true},
