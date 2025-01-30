@@ -1,4 +1,5 @@
 import mongoose, {model, Schema} from "mongoose";
+import config from "dotenv";
 
 mongoose.connect(`mongodb+srv://newton:${process.env.MONGOPASSWORD}@cluster0.5rnez.mongodb.net/brainly`)
 
