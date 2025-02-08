@@ -1,5 +1,5 @@
 import mongoose, {model, Schema} from "mongoose";
-import config from "dotenv";
+import 'dotenv/config';
 
 mongoose.connect(`mongodb+srv://newton:${process.env.MONGOPASSWORD}@cluster0.5rnez.mongodb.net/brainly`)
 
@@ -13,6 +13,7 @@ export const UserModel = model("User", UserSchema);
 const ContentSchema = new Schema({
     title: String,
     link: String,
+    type: { type: String, enum: ["twitter", "youtube", "document", "link", "tag"]},
     tags: [{type: mongoose.Types.ObjectId, ref: 'Tag'}],
     userId: {type: mongoose.Types.ObjectId, ref: 'User', required: false }
 })

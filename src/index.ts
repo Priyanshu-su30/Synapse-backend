@@ -74,16 +74,24 @@ app.post("/api/v1/content", userMiddleware, async (req, res) => {
     
 })
 
-app.get("/api/v1/content", userMiddleware, async (req,res) => {
+app.get("/api/v1/content", userMiddleware, async (req, res) => {
     //@ts-ignore
     const userId = req.userId;
-    const content = await ContentModel.find({
-        userId: userId
-    }).populate("userId", "username")
+    const type = req.query.type; 
+
+    const filter: any = { userId: userId };
+    if (type) {
+        filter.type = type; 
+    }
+
+    const content = await ContentModel.find(filter).populate("userId", "username");
     res.json({
-        content
-    })
-})
+        content,
+    });
+});
+
+
+
 
 app.delete("/api/v1/content", userMiddleware, async (req, res) => {
     const contentId = req.body.contentid; 

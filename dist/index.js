@@ -77,14 +77,29 @@ app.post("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter
         message: "Content added"
     });
 }));
+// app.get("/api/v1/content", userMiddleware, async (req,res) => {
+//     //@ts-ignore
+//     const userId = req.userId;
+//     const type = req.body.type;
+//     const content = await ContentModel.find({
+//         userId: userId,
+//         ...(type && { type }) 
+//     }).populate("userId", "username")
+//     res.json({
+//         content,
+//     })
+// })
 app.get("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //@ts-ignore
     const userId = req.userId;
-    const content = yield db_1.ContentModel.find({
-        userId: userId
-    }).populate("userId", "username");
+    const type = req.query.type; // ✅ Use query parameter instead of body
+    const filter = { userId: userId };
+    if (type) {
+        filter.type = type; // Add type to filter if provided
+    }
+    const content = yield db_1.ContentModel.find(filter).populate("userId", "username");
     res.json({
-        content
+        content,
     });
 }));
 app.delete("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
