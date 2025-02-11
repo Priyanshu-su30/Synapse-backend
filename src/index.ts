@@ -1,10 +1,11 @@
 import express from 'express';
 import jwt from "jsonwebtoken";
 import { ContentModel, LinkModel, UserModel } from './db';
-import { JWT_PASSWORD } from "./config";
 import { userMiddleware } from './middleware';
 import { random } from './utils';
 import cors from 'cors';
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 app.use(express.json());
@@ -44,7 +45,7 @@ app.post("/api/v1/signin", async (req,res) => {
     if(existingUser){
         const token = jwt.sign({
             ID: existingUser._id
-        }, JWT_PASSWORD)
+        }, process.env.JWTPASS as string)
 
         res.json({
             token

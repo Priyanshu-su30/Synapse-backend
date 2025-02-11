@@ -15,10 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = require("./db");
-const config_1 = require("./config");
 const middleware_1 = require("./middleware");
 const utils_1 = require("./utils");
 const cors_1 = __importDefault(require("cors"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
@@ -51,7 +52,7 @@ app.post("/api/v1/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
     if (existingUser) {
         const token = jsonwebtoken_1.default.sign({
             ID: existingUser._id
-        }, config_1.JWT_PASSWORD);
+        }, process.env.JWTPASS);
         res.json({
             token
         });
@@ -77,25 +78,13 @@ app.post("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter
         message: "Content added"
     });
 }));
-// app.get("/api/v1/content", userMiddleware, async (req,res) => {
-//     //@ts-ignore
-//     const userId = req.userId;
-//     const type = req.body.type;
-//     const content = await ContentModel.find({
-//         userId: userId,
-//         ...(type && { type }) 
-//     }).populate("userId", "username")
-//     res.json({
-//         content,
-//     })
-// })
 app.get("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //@ts-ignore
     const userId = req.userId;
-    const type = req.query.type; // ✅ Use query parameter instead of body
+    const type = req.query.type;
     const filter = { userId: userId };
     if (type) {
-        filter.type = type; // Add type to filter if provided
+        filter.type = type;
     }
     const content = yield db_1.ContentModel.find(filter).populate("userId", "username");
     res.json({

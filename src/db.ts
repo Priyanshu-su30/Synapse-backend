@@ -1,7 +1,7 @@
 import mongoose, {model, Schema} from "mongoose";
 import 'dotenv/config';
 
-mongoose.connect(`mongodb+srv://newton:${process.env.MONGOPASSWORD}@cluster0.5rnez.mongodb.net/brainly`)
+mongoose.connect(`mongodb+srv://${process.env.MONGOUSERNAME}:${process.env.MONGOPASSWORD}@cluster0.5rnez.mongodb.net/brainly`)
 
 const UserSchema = new Schema({
     username: {type: String, unique: true},

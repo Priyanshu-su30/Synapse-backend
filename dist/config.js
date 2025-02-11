@@ -1,4 +1,3 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.JWT_PASSWORD = void 0;
-exports.JWT_PASSWORD = "!123123";
+// require('dotenv').config();
+// export const JWT_PASSWORD = process.env.JWTPASS;
