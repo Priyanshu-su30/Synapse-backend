@@ -4,7 +4,6 @@ import { ContentModel, LinkModel, UserModel } from './db';
 import { userMiddleware } from './middleware';
 import { random } from './utils';
 import cors from 'cors';
-const bcrypt = require('bcrypt');
 import dotenv from "dotenv";
 dotenv.config();
 
