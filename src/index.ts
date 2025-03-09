@@ -4,6 +4,7 @@ import { ContentModel, LinkModel, UserModel } from './db';
 import { userMiddleware } from './middleware';
 import { random } from './utils';
 import cors from 'cors';
+const bcrypt = require('bcrypt');
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -46,6 +47,7 @@ app.post("/api/v1/signin", async (req,res) => {
         const token = jwt.sign({
             ID: existingUser._id
         }, process.env.JWTPASS as string)
+        console.log("Sign-In: Generated token for userId:", existingUser._id);
 
         res.json({
             token
@@ -65,7 +67,6 @@ app.post("/api/v1/content", userMiddleware, async (req, res) => {
         link,
         type,
         title: req.body.title,
-        //@ts-ignore
         userId: req.userId,
         tags: [],
     })
@@ -76,7 +77,7 @@ app.post("/api/v1/content", userMiddleware, async (req, res) => {
 })
 
 app.get("/api/v1/content", userMiddleware, async (req, res) => {
-    //@ts-ignore
+    
     const userId = req.userId;
     const type = req.query.type; 
 
@@ -91,7 +92,17 @@ app.get("/api/v1/content", userMiddleware, async (req, res) => {
     });
 });
 
+// app.get("/api/v1/content", userMiddleware, async (req, res) => {
+    
+//     const userId = req.userId;
 
+//     const content = await ContentModel.find({
+//         userId: userId
+//         }).populate("userId", "username")
+//         res.json({
+//         content
+//     })
+// })
 
 
 app.delete("/api/v1/content", userMiddleware, async (req, res) => {

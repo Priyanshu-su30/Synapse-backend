@@ -1,4 +1,4 @@
-import mongoose, {model, Schema} from "mongoose";
+import mongoose, {Types, model, Schema} from "mongoose";
 import 'dotenv/config';
 
 mongoose.connect(`mongodb+srv://${process.env.MONGOUSERNAME}:${process.env.MONGOPASSWORD}@cluster0.5rnez.mongodb.net/brainly`)
@@ -20,7 +20,7 @@ const ContentSchema = new Schema({
 
 const LinkSchema = new Schema({
     hash: String,
-    userId: {type: mongoose.Types.ObjectId, ref: 'User', required: false, unique: true}
+    userId: {type: mongoose.Types.ObjectId, ref: 'User', required: true, unique: true}
 })
 
 

@@ -18,6 +18,7 @@ const db_1 = require("./db");
 const middleware_1 = require("./middleware");
 const utils_1 = require("./utils");
 const cors_1 = __importDefault(require("cors"));
+const bcrypt = require('bcrypt');
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -53,6 +54,7 @@ app.post("/api/v1/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
         const token = jsonwebtoken_1.default.sign({
             ID: existingUser._id
         }, process.env.JWTPASS);
+        console.log("Sign-In: Generated token for userId:", existingUser._id);
         res.json({
             token
         });
@@ -70,7 +72,6 @@ app.post("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter
         link,
         type,
         title: req.body.title,
-        //@ts-ignore
         userId: req.userId,
         tags: [],
     });
@@ -79,7 +80,6 @@ app.post("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter
     });
 }));
 app.get("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //@ts-ignore
     const userId = req.userId;
     const type = req.query.type;
     const filter = { userId: userId };
@@ -87,10 +87,20 @@ app.get("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(
         filter.type = type;
     }
     const content = yield db_1.ContentModel.find(filter).populate("userId", "username");
+    console.log("Here's the user id: " + userId);
     res.json({
         content,
     });
 }));
+// app.get("/api/v1/content", userMiddleware, async (req, res) => {
+//     const userId = req.userId;
+//     const content = await ContentModel.find({
+//         userId: userId
+//         }).populate("userId", "username")
+//         res.json({
+//         content
+//     })
+// })
 app.delete("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const contentId = req.body.contentid;
     try {
